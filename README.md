@@ -1,3 +1,9 @@
+Basic property buy/sale system with multiple roles(superadmin, customer, owner) using MEAN stack
+
+MongoDB(DB name) => property
+NodeJS port => 9000
+AngularJS port => 8080
+
 # Client
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.8.
