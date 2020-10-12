@@ -1,8 +1,8 @@
 Basic property buy/sale system with multiple roles(superadmin, customer, owner) using MEAN stack
 
-MongoDB(DB name) => property
-NodeJS port => 9000
-AngularJS port => 8080
+MongoDB(DB name) => property;
+NodeJS port => 9000;
+AngularJS port => 8080;
 
 # Client
 
