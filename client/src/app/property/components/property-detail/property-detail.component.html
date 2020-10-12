@@ -1,0 +1,64 @@
+<div *ngIf="property">
+
+    <div class="row">
+        <app-header class="col-md-12"></app-header>
+
+        <div class="col-md-12">
+            <span class="btn btn-primary" *ngIf="role == 'customer'" (click)="onInterestedIconClick()"><i
+                [ngClass]="isInterested ? 'fa fa-check': 'fa fa-star'"></i></span>
+        </div>
+        
+
+        <ul class="list-group list-group-flush col-md-6">
+            <li class="list-group-item">
+                <span class="property-detail-title">Type : </span>
+                <small class="text-capitalize property-detail-data">{{property.type}}</small>
+            </li>
+            <li class="list-group-item">
+                <span class="property-detail-title">Location : </span>
+                <small class="text-capitalize property-detail-data">{{property.location}}</small>
+            </li>
+            <li class="list-group-item">
+                <span class="property-detail-title">Expected Price : </span>
+                <small class="text-capitalize property-detail-data">{{property.price}}</small>
+            </li>
+            <li class="list-group-item">
+                <span class="property-detail-title">Contact No : </span>
+                <small class="text-capitalize property-detail-data">{{property.owner.contactNo}}</small>
+            </li>
+            <li class="list-group-item">
+                <span class="property-detail-title">Area : </span>
+                <small class="text-capitalize property-detail-data">{{property.area}}</small>
+            </li>
+            <li class="list-group-item">
+                <span class="property-detail-title">Road : </span>
+                <small class="text-capitalize property-detail-data">{{property.road}}</small>
+            </li>
+
+        </ul>
+        <ul class="list-group list-group-flush col-md-6">
+            <li class="list-group-item">
+                <img [src]="property.photo" style="height: 184px; width: 300px;" />
+            </li>
+
+            <li class="list-group-item" *ngFor="let detail of propertyDetails | keyvalue">
+                <span class="property-detail-title">{{detail.key}} : </span>
+                <small class="text-capitalize property-detail-data">{{detail.value}}</small>
+            </li>
+            <li class="list-group-item" *ngIf="property.features.length > 0 && property.features[0] != ''">
+                <span class="property-detail-title">Other Features :</span>
+                <ul class="col-md-6">
+                    <li *ngFor="let feature of property.features">
+                        <small class="text-capitalize property-detail-data"
+                            style="font-size: 20px; font-weight: 500;">{{feature}}</small>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <hr>
+    <div *ngIf="role!='customer'">
+        <app-interested-customers-table *ngIf="propertyId" [propertyId]="propertyId" [buyer]="buyer"
+            [propertyStatus]="propertyStatus"></app-interested-customers-table>
+    </div>
+</div>

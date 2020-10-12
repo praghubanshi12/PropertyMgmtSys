@@ -1,0 +1,130 @@
+  <app-header></app-header>
+  <app-property-form-modal *ngIf="!customerName"></app-property-form-modal>
+  <a routerLink="/customers"><button class="btn btn-secondary float-right"><i class="fa fa-users"></i> Customers</button></a>
+  <h2 *ngIf="customerName">Customer: {{customerName}}</h2>
+  <table *ngIf="properties" datatable [dtOptions]="dtOptions" class="table table-striped" id="property-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Location</th>
+        <th>Road</th>
+        <th>Area</th>
+        <th>Price</th>
+        <th>Owner</th>
+        <th>Status</th>
+        <th>Interested Customers</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let property of properties">
+        <td>{{property.type}}</td>
+        <td>{{property.location}}</td>
+        <td [innerHtml]="property.road"></td>
+        <td>{{property.area}}</td>
+        <td>{{property.price}}</td>
+        <td>
+          <strong>{{property.owner?.fullName}}</strong> <br />( {{property.owner?.email}} )
+        <td>
+          <label [ngClass]="'badge badge-'+ property.status?.color">{{property.status?.name}}
+            <span *ngIf="property.status?.name == 'sold'" class="btn btn-info btn-sm" (click)="showBuyerDetails(property, buyerDetailsModalContent)">
+              <i class="fa fa-eye"></i>
+            </span>
+          </label>
+          
+        </td>
+        <td (click)="onInterestedCustomersBtnClick(property, interestedCustomersModalContent)" style="text-align: center; "><span
+            class="btn btn-primary">{{property.interestedCustomersCount}}</span></td>
+        <td>
+          <span (click)="onPropertyDetailsBtnClick(property.id, property.type, property)" class="btn btn-info btn-sm">
+            <i class="fa fa-eye"></i>
+          </span>
+          <div *ngIf="property.status?.name == 'unverified'">
+            <button class="btn btn-sm btn-success" (click)="verifyProperty(property)">Verify</button>
+            <!-- <button class="btn btn-sm btn-danger" (click)="rejectProperty(property)">Reject</button> -->
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- property details modal -->
+  <ng-template #propertyDetailsModalContent let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Property details</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div *ngFor="let detail of propertyDetails | keyvalue">
+        <div class="row">
+          <strong class="col-md-4">{{detail.key}}</strong>
+          <span class="col-md-6">{{detail.value}}</span>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="propertyFeatures?.length > 0" style="margin-top: 15px;">
+        <strong class="col-md-4">Features:</strong>
+        <ul class="col-md-6">
+          <li *ngFor="let feature of propertyFeatures">{{feature}}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>
+  <!-- property details modal -->
+
+  <!-- interested customers modal -->
+  <ng-template #interestedCustomersModalContent let-modal modal-lg>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-basic-title"><span class="badge" [ngClass]="(interestedPropertyType=='land')? 'badge-success': 'badge-warning' ">{{interestedPropertyLocation}} ({{interestedPropertyType}})</span></h2>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-interested-customers-table *ngIf="propertyId" [propertyId]="propertyId" [propertyStatus]="propertyStatus" [buyer]="buyer" [modalRef]="customersModalRef">
+      </app-interested-customers-table>
+    </div>
+  </ng-template>
+  <!-- interested customers modal -->
+
+  <!-- buyer details modal -->
+  <ng-template #buyerDetailsModalContent let-modal modal-lg>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-basic-title"><span class="badge" [ngClass]="(boughtPropertyType=='land')? 'badge-success': 'badge-warning' ">{{boughtPropertyLocation}} ({{boughtPropertyType}})</span></h2>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="container">
+        <div class="row">
+          <h5 class="buyer-detail-title"><strong>Buyer Name : </strong></h5>
+          <h5><span> &nbsp;{{buyer.name}}</span></h5>
+        </div>
+        
+        <div class="row">
+          <h5 class="buyer-detail-title"><strong>Contact Number : </strong></h5>
+          <h5><span> &nbsp;{{buyer.contactNo}}</span></h5>
+        </div>
+  
+        <div class="row">
+          <h5 class="buyer-detail-title"><strong>Address : </strong></h5>
+          <h5><span> &nbsp;{{buyer.address}}</span></h5>
+        </div>
+  
+        <div class="row">
+          <h5 class="buyer-detail-title"><strong>Email : </strong></h5>
+          <h5><span> &nbsp;{{buyer.email}}</span></h5>
+        </div>
+      </div>
+      
+    </div>
+  </ng-template>
+  <!-- interested customers modal -->

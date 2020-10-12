@@ -1,0 +1,36 @@
+    <form [formGroup]="signUpForm" #ngForm="ngForm">
+        <div [ngClass]="(signUpForm.get('email').errors) ? 'has-error': ''">
+            <label>Email</label>
+            <input class="form-control" type="email" formControlName="email" required>
+
+            <div *ngIf="signUpForm.get('email').errors?.required && ngForm.submitted" class="alert alert-danger">
+                <label>Email is required!</label>
+            </div>
+        </div>
+
+        <div [ngClass]="(signUpForm.get('password').errors)? 'has-error': ''">
+            <label>Password</label>
+            <input class="form-control" type="password" formControlName="password" required>
+
+            <div *ngIf="signUpForm.get('password').errors?.required && ngForm.submitted" class="alert alert-danger">
+                <label>Password is required!</label>
+            </div>
+
+            <div *ngIf="signUpForm.get('password').errors?.minlength && ngForm.submitted" class="alert alert-danger">
+                <label>Minimun length for password is 4 characters!</label>
+            </div>
+        </div>
+
+        <div *ngIf="userRole=='multiple' && multipleRoles.length > 1; else singleRoleLogin">
+            <div *ngFor="let role of multipleRoles">
+                <button type="submit" class="btn btn-success login-btn" (click)="onSubmit(signUpForm, role)">Login as {{role}}</button>
+            </div>
+        </div>
+
+        <ng-template #singleRoleLogin>
+            <button type="submit" (click)="onSubmit(signUpForm, 'singleRole')" class="btn btn-success login-btn">Login</button>
+        </ng-template>
+    </form>
+    <div *ngIf="serverErrorMessages">
+        {{serverErrorMessages}}
+    </div>

@@ -1,0 +1,36 @@
+<app-header></app-header>
+
+<h2>Welcome, {{ownerDetails?.name}} !</h2>
+<app-property-form-modal></app-property-form-modal>
+
+<div class="row">
+    <div *ngFor="let property of myProperties" class= "col-md-4">
+        <div class="card">
+          <img class="card-img-top" alt="Card image cap" [src]="property.photo">
+            <div class="card-body">
+                <span class="btn btn-info float-right" (click)="viewPropertyDetails(property)"><i class="fa fa-eye"></i></span>
+                <span class="btn btn-primary float-right" (click)="onInterestedCustomersBtnClick(property, interestedCustomersModalContent)"><i class="fa fa-users"> {{property.interestedCustomersCount}}</i></span>
+                <h4><label class="badge" [ngClass]="(property.type == 'land')? 'badge-success': 'badge-warning'">{{property.type}}</label></h4> 
+                <h4 class="card-title">{{property.location}}</h4>
+                <h5 class="card-text">Area: {{property.area}}</h5>
+                <h5 class="card-text">Price: {{property.price}}</h5>
+                <h5><label class="badge" [ngClass]="'badge-' + property.status?.color">{{property.status?.name}}</label></h5> 
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- interested customers modal -->
+<ng-template #interestedCustomersModalContent let-modal modal-lg>
+    <div class="modal-header">
+      <h2 class="modal-title" id="modal-basic-title"><span class="badge" [ngClass]="(interestedPropertyType=='land')? 'badge-success': 'badge-warning' ">{{interestedPropertyLocation}} ({{interestedPropertyType}})</span></h2>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <app-interested-customers-table *ngIf="propertyId" [buyer]="buyer" [propertyId]="propertyId" [propertyStatus]="propertyStatus" [modalRef]="customersModalRef"></app-interested-customers-table>
+    </div>
+
+</ng-template>
+  <!-- interested customers modal -->

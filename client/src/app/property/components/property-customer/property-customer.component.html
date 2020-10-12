@@ -1,0 +1,22 @@
+<app-header></app-header>
+<h2>Welcome, {{customerDetails?.name}}!</h2>
+
+<div class="row">
+    <div *ngFor="let property of properties" class= "col-md-4">
+        <div class="card">
+            <img class="card-img-top" alt="Card image cap" [src]="property.photo">
+            <div class="card-body">
+                <span class="btn btn-info float-right" (click)="viewPropertyDetails(property)"><i class="fa fa-eye"></i></span>
+                <button class="btn btn-primary float-right" *ngIf="property.status.name == 'pending'" 
+                    [disabled]="isStarButtonDisabled" (click)="onInterestedIconClick(property)">
+                        <i [ngClass]="property.isCustomerInterested ? 'fa fa-check': 'fa fa-star'"></i>
+                </button>
+                <h4><label class="badge" [ngClass]="(property.type == 'land')? 'badge-success': 'badge-warning'">{{property.type}}</label></h4> 
+                <h4 class="card-title">{{property.location}}</h4>
+                <h5 class="card-text">Area: {{property.area}}</h5>
+                <h5 class="card-text">Price: {{property.price}}</h5>
+                <h4><label class="badge" [ngClass]="'badge-'+ property.status.color">{{property.status.name}}</label></h4> 
+            </div>
+        </div>
+    </div>
+</div>

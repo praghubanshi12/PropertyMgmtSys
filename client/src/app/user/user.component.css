@@ -1,0 +1,4 @@
+.active, .btn:hover {
+    background-color: blue;
+    color: white;
+  }

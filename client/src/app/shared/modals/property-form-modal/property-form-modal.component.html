@@ -1,0 +1,157 @@
+<button class="btn btn-primary" (click)="onPropertyAddBtnClick(propertyFormModalContent)">
+    <i class="fa fa-plus"></i>
+</button>
+<!-- property form modal -->
+<ng-template #propertyFormModalContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add a new Property</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form [formGroup]="propertyForm" #ngForm="ngForm" (ngSubmit)="propertyForm.valid && savePropertyForm(propertyForm)">
+        <div class="modal-body">
+            <!-- File Input -->
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Image<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="file" (change)="uploadFile($event)" required>
+            </div>
+
+            <div *ngIf="preview && preview!=null" class="row">
+                <img class="img-preview" [src]="preview">
+            </div>
+            
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Type<span class="text-danger">* </span></label>
+                <select name="type" class="form-control col-md-6" formControlName="type" required>
+                    <option value="land">Land</option>
+                    <option value="house">House</option>
+                </select>
+            </div>
+
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Road<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="text" formControlName="road" required>
+            </div>
+
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Area<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="text" formControlName="area" required>
+            </div>
+
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Location<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="text" formControlName="location" required>
+            </div>
+
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Price(Rs.)<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="number" formControlName="price" required>
+            </div>
+
+            <div *ngIf="propertyForm.value.type=='land'" class="row input-group input-group-div">
+                <label class="col-md-4">Unit<span class="text-danger"> * </span></label>
+                <input class="form-control col-md-6" type="text" formControlName="unit" required>
+            </div>
+
+            <div class="row input-group input-group-div">
+                <label class="col-md-4">Owner<span class="text-danger"> * </span></label>
+                <select class="form-control col-md-6" formControlName="ownerId" aria-describedby="basic-addon1" required
+                    [disabled]="role=='owner'? true: null">
+                    <option *ngIf="owners.length < 1" value="">No owners Found</option>
+                    <option *ngFor="let owner of owners" [value]="owner.id">{{owner.fullName}}</option>
+                </select>
+                <div class="input-group-append" *ngIf="role == 'superadmin'">
+                    <span class="btn btn-primary" id="basic-addon1" (click)="onOwnerAddBtnClick(ownerFormModalContent)">
+                        <i class="fa fa-plus" aria-hidden="true"> </i>
+                    </span>
+                </div>
+            </div>
+
+            <div>
+                <strong>Features :</strong>
+                <span class="btn btn-primary float-right" (click)="addFeature()">Add more</span>
+            </div>
+
+            <div *ngFor="let feature of getFeatures().controls; let i = index" formArrayName="features"
+               >
+                <div [formGroupName]="i" class="row input-group input-group-div">
+                    <input type="text" formControlName="feature" class="col-md-6" aria-describedby="basic-addon2">
+                    <span (click)="removeFeature(i)" id="basic-addon2"
+                        class="btn btn-danger input-group-append">Remove</span>
+                </div>
+            </div>
+
+
+            <div *ngIf="propertyForm.get('type').value == 'land'" formGroupName="landDetails">
+                <strong>Land Details : <span class="text-danger"> * </span></strong>
+                <div class="row row input-group input-group-div">
+                    <label class="col-md-3">Facing</label>
+                    <input class="form-control col-md-4" formControlName="facing" type="text">
+                </div>
+            </div>
+
+            <div *ngIf="propertyForm.get('type').value == 'house'" formGroupName="houseDetails">
+                <strong>House Details : <span class="text-danger"> * </span></strong>
+                <div class="row row input-group input-group-div">
+                    <label class="col-md-4">No. of Bedroom</label>
+                    <input class="form-control col-md-6" type="number" formControlName="noOfBedroom">
+                </div>
+
+                <div class="row row input-group input-group-div">
+                    <label class="col-md-4">No. of Kitchen</label>
+                    <input class="form-control col-md-6" type="number" formControlName="noOfKitchen">
+                </div>
+
+                <div class="row row input-group input-group-div">
+                    <label class="col-md-4">No. of Bathroom</label>
+                    <input class="form-control col-md-6" type="number" formControlName="noOfBathroom">
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <strong class="text-danger" *ngIf="ngForm.submitted && !propertyForm.valid">Please fill all the details
+                marked
+                as * properly {{propertyForm}}</strong>
+            <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</ng-template>
+<!-- property form modal -->
+
+<!-- owner form modal -->
+<ng-template #ownerFormModalContent let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add a new Owner</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form [formGroup]="ownerForm" #ngOwnerForm=ngForm (ngSubmit)="ngOwnerForm.valid && saveOwnerForm(ownerForm)">
+        <div class="modal-body">
+            <div class="row">
+                <label class="col-md-4">Name</label>
+                <input class="col-md-6 form-control" formControlName="name" type="text">
+            </div>
+
+            <div class="row">
+                <label class="col-md-4">Email</label>
+                <input class="col-md-6 form-control" formControlName="email" type="email">
+            </div>
+
+            <div class="row">
+                <label class="col-md-4">Contact No.</label>
+                <input class="col-md-6 form-control" formControlName="contactNo" type="text">
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <strong class="text-danger" *ngIf="ngOwnerForm.submitted && !ngOwnerForm.valid">Please fill all the
+                details</strong>
+            <button type="submit" class="btn btn-outline-dark">Save</button>
+        </div>
+    </form>
+
+</ng-template>
+<!-- owner form modal -->

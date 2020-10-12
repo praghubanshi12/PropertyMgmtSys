@@ -1,0 +1,25 @@
+    <app-header></app-header>
+    <h2>Customers</h2>
+    <a routerLink="/admin/properties"><button class="btn btn-secondary float-right"><i class="fa fa-home"></i> Properties</button></a>
+    <table datatable *ngIf="customers" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Contact No.</th>
+                <th>Interested Properties (Bought)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let customer of customers">
+                <td>{{customer.name}}</td>
+                <td>{{customer.address}}</td>
+                <td>{{customer.email}}</td>
+                <td>{{customer.contactNo}}</td>
+                <td><span class="btn btn-primary btn-sm" (click)="showInterestedProperties(customer._id)">{{customer.interestedPropertiesCount}} ({{customer.boughtPropertiesCount}})</span> </td>
+            </tr>
+        </tbody>
+    </table>
+
+

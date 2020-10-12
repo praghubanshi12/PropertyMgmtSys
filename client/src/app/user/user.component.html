@@ -1,0 +1,9 @@
+<div class="container">
+    <h1 style="font-family: cursive; color: blue">Property Management System</h1>
+
+    <div id="formContent">
+        <span class="btn" [ngClass]="loginActive? 'active': ''" routerLink="/login">Sign in</span>
+        <span class="btn" [ngClass]="signupActive? 'active': ''" routerLink="/register">Create a new Customer Account</span>
+        <router-outlet></router-outlet>
+    </div>
+</div>
